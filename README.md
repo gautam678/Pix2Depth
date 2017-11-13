@@ -1,6 +1,12 @@
+# Dataset
+
+The dataset for this repo can be downloaded [here](https://cs.nyu.edu/~silberman/datasets/nyu_depth_v2.html).
+
+Place the downloaded file in the folder data/
+
 # Training and evaluating
 
-## Training
+## Training (need to be updated later)
 
 `python main.py`
 
@@ -40,10 +46,9 @@ optional arguments:
 `python main.py 64 64`
 
 
-### Expected outputs:
-
-- Weights are saved in  pix2pix/models
-- Figures are saved in  pix2pix/figures
+## Output
+- The weights are stored in models/
+- The generated images are stored in figures/
 - Save model weights every few epochs
 
 ### Additional notes
@@ -56,3 +61,4 @@ You can choose the type of generator:
 - `deconv:` use keras' transposed convolutions `Deconvolution2D`. This is closer to the original DCGAN implementation. 
 
 At this stage, `deconv` only works with the `tensorflow` backend.
+
