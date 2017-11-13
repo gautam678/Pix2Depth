@@ -58,7 +58,5 @@ You can choose the type of generator:
 - The image dimension must be a multiple of the patch size (e.g. 256 is a multiple of 64)
 - In the discriminator, each patch goes through the same feature extractor. Then the outputs are combined with a new dense layer + softmax
 - `upsampling:` generate the image with a series of `Upsampling2D` and `Convolution2D` operations 
-- `deconv:` use keras' transposed convolutions `Deconvolution2D`. This is closer to the original DCGAN implementation. 
-
-At this stage, `deconv` only works with the `tensorflow` backend.
+- `deconv:` use keras' transposed convolutions `Deconvolution2D`. This is closer to the original DCGAN implementation.
 
