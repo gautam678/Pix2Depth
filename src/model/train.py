@@ -47,7 +47,7 @@ def train(**kwargs):
 
     # Load and rescale data
     #X_full_train, X_sketch_train, X_full_val, X_sketch_val = data_utils.load_data(dset, image_data_format)
-    img_dim =(256,256,3) # Manual entry
+    img_dim = (256,256,3) # Manual entry
 
     # Get the number of non overlapping patch and the size of input image to the discriminator
     nb_patch, img_dim_disc = data_utils.get_nb_patch(img_dim, patch_size, image_data_format)

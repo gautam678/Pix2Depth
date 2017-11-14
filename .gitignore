@@ -1,3 +1,4 @@
 data/
 figures/
 **/.DS_Store
+*.pyc
