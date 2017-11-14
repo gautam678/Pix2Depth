@@ -137,7 +137,7 @@ def get_disc_batch(X_full_batch, X_sketch_batch, generator_model, batch_counter,
     return X_disc, y_disc
 
 
-def plot_generated_batch(X_full, X_sketch, generator_model, batch_size, image_data_format, suffix):
+def plot_generated_batch(X_full, X_sketch, generator_model, batch_size, image_data_format, suffix, show_plot=False):
 
     # Generate images
     X_gen = generator_model.predict(X_sketch)
@@ -169,10 +169,11 @@ def plot_generated_batch(X_full, X_sketch, generator_model, batch_size, image_da
         Xr = np.concatenate(list_rows, axis=1)
         Xr = Xr.transpose(1,2,0)
 
-    if Xr.shape[-1] == 1:
-        plt.imshow(Xr[:, :, 0], cmap="gray")
-    else:
-        plt.imshow(Xr)
+    if show_plot:
+        if Xr.shape[-1] == 1:
+            plt.imshow(Xr[:, :, 0], cmap="gray")
+        else:
+            plt.imshow(Xr)
     plt.axis("off")
     plt.savefig("../../figures/current_batch_%s.png" % suffix)
     plt.clf()
