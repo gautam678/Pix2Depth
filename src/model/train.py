@@ -135,8 +135,9 @@ def train(**kwargs):
                 # Save images for visualization
                 if batch_counter % (n_batch_per_epoch / 2) == 0:
                     # Get new images from validation
+                    figure_name = "training_"+str(e)
                     data_utils.plot_generated_batch(X_full_batch, X_sketch_batch, generator_model,
-                                                    batch_size, image_data_format, "training")
+                                                    batch_size, image_data_format, figure_name)
 
                 if batch_counter >= n_batch_per_epoch:
                     break
