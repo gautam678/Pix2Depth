@@ -9,13 +9,14 @@ import cv2
 import sys
 import numpy as np
 
-def fDataSet_generator(img_dim_tuple,batch_size=10):
-    path = "../../data/nyu_depth_v2_labeled.mat"
-    f = h5py.File(path)
+def fDataSet_generator(img_dim_tuple,batch_size=10, f=None, indexes=1448):
+    if(f==None):
+    	path = "../../data/nyu_depth_v2_labeled.mat"
+    	f = h5py.File(path)
     img_dim = img_dim_tuple[0]
     def innerGenerator():
         while True:
-        	samples = np.random.choice(1448,batch_size,replace=True)
+        	samples = np.random.choice(indexes,batch_size,replace=True)
         	img_batch = np.empty((batch_size,img_dim,img_dim,3))
         	depth_batch = np.empty((batch_size,img_dim,img_dim,3))
         	for index,i in enumerate(samples):
@@ -45,7 +46,7 @@ if __name__ == "__main__":
 	model = generator_unet_upsampling(img_dim, bn_mode, batch_size)
 	model.load_weights('../../models/CNN/pix2depthgen_weights_epoch%d.h5' % i) #gen_weights_epoch45.h5
 	dmap = model.predict(img)[0]
-	print (dep[0][0][0])
+	print (dep[0][1][0])
 	print (dep.shape)
-	print (dmap[0][0])
+	print (dmap[1][0])
 	cv2.imwrite("test_%d.jpg" % i,np.hstack((dmap*255,dep[0]*255)))
