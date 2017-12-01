@@ -40,7 +40,9 @@ def train(**kwargs):
     label_flipping = kwargs["label_flipping"]
     dset = kwargs["dset"]
     use_mbd = kwargs["use_mbd"]
-
+    lastLayerActivation=kwargs["lastLayerActivation"]
+    PercentageOfTrianable=kwargs["PercentageOfTrianable"]
+    SpecificPathStr=kwargs["SpecificPathStr"]
     epoch_size = n_batch_per_epoch * batch_size
 
     # Setup environment (logging directory etc)
@@ -61,12 +63,15 @@ def train(**kwargs):
         opt_discriminator = Adam(lr=1E-3, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
         # Load generator model
+        """
         generator_model = models.load("generator_unet_%s" % generator,
                                       img_dim,
                                       nb_patch,
                                       bn_mode,
                                       use_mbd,
                                       batch_size)
+        """
+        generator_model=CreatErrorMapModel(input_shape=img_dim,lastLayerActivation=lastLayerActivation, PercentageOfTrianable=PercentageOfTrianable)
         # Load discriminator model
         discriminator_model = models.load("DCGAN_discriminator",
                                           img_dim_disc,
@@ -75,7 +80,25 @@ def train(**kwargs):
                                           use_mbd,
                                           batch_size)
 
-        generator_model.compile(loss='mae', optimizer=opt_discriminator)
+         generator_model.compile(loss='mae', optimizer=opt_discriminator)
+#-------------------------------------------------------------------------------
+         logpath=os.path.join('../../log','DepthMapWith'+lastLayerActivation+str(PercentageOfTrianable)+'UnTr'+SpecificPathStr)
+         modelPath=os.path.join('../../models','DepthMapwith'+lastLayerActivation+str(PercentageOfTrianable)+'Untr'+SpecificPathStr)
+         os.makedirs(logpath, exist_ok=True)
+         os.makedirs(modelPath, exist_ok=True)os.makedirs(modelPath, exist_ok=True)
+
+#-----------------------PreTraining Depth Map-------------------------------------
+         nb_train_samples = 2000
+         nb_validation_samples = 
+         epochs = 20
+         history=whole_model.fit_generator(data_utils.facades_generator(img_dim,batch_size=batch_size), samples_per_epoch=nb_train_samples,epochs=epochs,validation_data=data_utils.facades_generator(img_dim,batch_size=batch_size),nb_val_samples=nb_validation_    samples,       callbacks=[
+         keras.callbacks.ModelCheckpoint(os.path.join(modelPath,'DepthMap_weightsBestLoss.h5'), monitor='val_loss', verbose=1, save_best_only=True),
+         keras.callbacks.ModelCheckpoint(os.path.join(modelPath,'DepthMap_weightsBestAcc.h5'), monitor='acc', verbose=1, save_best_only=True),
+         keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.1, patience=2, verbose=1, mode='auto', epsilon=0.0001, cooldown=0, min_lr=0),
+         keras.callbacks.TensorBoard(log_dir=logpath, histogram_freq=0, batch_size=batchSize, write_graph=True, write_grads=False, write_images=True, embeddin    gs_freq=0, embeddings_layer_names=None, embeddings_metadata=None)],)
+#------------------------------------------------------------------------------------
+
+
         discriminator_model.trainable = False
 
         DCGAN_model = models.DCGAN(generator_model,

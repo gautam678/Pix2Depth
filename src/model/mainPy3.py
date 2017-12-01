@@ -26,7 +26,8 @@ if __name__ == "__main__":
     parser.add_argument('--use_mbd', action="store_true", help="Whether to use minibatch discrimination")
     parser.add_argument('--use_label_smoothing', action="store_true", help="Whether to smooth the positive labels when training D")
     parser.add_argument('--label_flipping', default=0, type=float, help="Probability (0 to 1.) to flip the labels when training D")
-
+    parser.add_argument('--lastLayerActivation', type=str, default='tanh', help="Activation of the lastLayer")
+    parser.add_argument('--PercentageOfTrianable', type=int, default=70, help="Percentage of Triantable Layers")
     args = parser.parse_args()
 
     # Set the backend by modifying the env variable
@@ -58,7 +59,10 @@ if __name__ == "__main__":
                 "use_label_smoothing": args.use_label_smoothing,
                 "label_flipping": args.label_flipping,
                 "patch_size": args.patch_size,
-                "use_mbd": args.use_mbd
+                "use_mbd": args.use_mbd,
+                "lastLayerActivation":args.lastLayerActivation,
+                "PercentageOfTrianable":args.PercentageOfTrianable
+
                 }
 
     # Launch training
