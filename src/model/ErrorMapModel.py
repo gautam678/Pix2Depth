@@ -30,8 +30,9 @@ def CreatErrorMapModel(input_shape, lastLayerActivation='hard_sigmoid', Percenta
 #    print(sharedResnet.summary())
 #    print(sharedResnet.get_config())
 #    print(sharedResnet.to_yaml())
-    for i,l in enumerate(sharedResnet.layers):
-    	print(i,"  ",l," ",l.output_shape,"\n")
+#    for i,l in enumerate(sharedResnet.layers):
+#    	print(i,"  ",l," ",l.output_shape,"\n")
+#    
     BaseModel=Model(sharedResnet.input, sharedResnet.layers[STOP_LAYER].output)
     x = BaseModel.output
     print("x output shapr is ", x.shape)
@@ -65,6 +66,8 @@ def CreatErrorMapModel(input_shape, lastLayerActivation='hard_sigmoid', Percenta
    
     for i,l in enumerate(whole_model.layers):
     	print(i,"  ",l," ",l.output_shape,"\n")
+
+#    whole_model.summary() 
     whole_model.compile(loss='mean_absolute_error',optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), metrics=['mae', 'acc'])
     return  whole_model
 

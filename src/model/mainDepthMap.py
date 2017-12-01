@@ -11,12 +11,12 @@ def launch_Depthtraining(**kwargs):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='DepthTrain model')
-    parser.add_argument('--batch_size', default=4, type=int, help='Batch size')
+    parser.add_argument('--batch_size', default=32, type=int, help='Batch size')
     parser.add_argument('--nb_train_samples', default=2000, type=int, help="Number of training epochs")
     parser.add_argument('--nb_validation_samples', default=800, type=int, help="Number of validatio sample")
     parser.add_argument('--nb_epoch', default=40, type=int, help="Number  epoch")
-    parser.add_argument('--lastLayerActivation', type=str, default='tanh', help="Activation of the lastLayer")
-    parser.add_argument('--PercentageOfTrianable', type=int, default=70, help="Percentage of Triantable Layers")
+    parser.add_argument('--lastLayerActivation', type=str, default='relu', help="Activation of the lastLayer")
+    parser.add_argument('--PercentageOfTrianable', type=int, default=50, help="Percentage of Triantable Layers")
     parser.add_argument('--SpecificPathStr', type=str, default='Org', help="PathStr")
     args = parser.parse_args()
 
