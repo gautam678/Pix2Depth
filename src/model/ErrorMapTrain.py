@@ -88,3 +88,4 @@ if __name__ == '__main__':
     plt.plot(history.history['loss'])
     PlotPath = os.path.join(logpath,'LossPlot.pdf' )
     plt.savefig(PlotPath,bbox_inches='tight')
+

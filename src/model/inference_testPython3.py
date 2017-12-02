@@ -8,6 +8,7 @@ model_name = "generator_unet_upsampling"
 import cv2
 import sys
 import numpy as np
+from ErrorMapModel import CreatErrorMapModel
 
 def facades_generator(img_dim_tuple,batch_size=10):
     path = "../../data/nyu_depth_v2_labeled.mat"
@@ -39,14 +40,22 @@ gen = facades_generator(img_dim, batch_size=1)
 
 img, dep = next(gen)
 cv2.imwrite("real.jpg",img[0]*255)
-i=130
-model = generator_unet_upsampling(img_dim, bn_mode, batch_size)
-model.load_weights('../../models/CNN/pix2depthgen_weights_epoch%d.h5' % i) #gen_weights_epoch45.h5
-dmap = model.predict(img)[0]
-print (dep[0][0][0])
-print (dep.shape)
-print (dmap[0][0])
-print(img[0][0][0])
-cv2.imwrite("test_%d.jpg" % i,np.hstack((dmap*255,dep[0]*255)))
+#i=130
+modelDir="ResNet"
+#modelPrefix="pix2depth"
+modelPrefix=""
+tesDir="../../testResults"
+lastLayerActivation="tanh"
+PercentageOfTrianable=70
+#model = generator_unet_upsampling(img_dim, bn_mode, batch_size)
+model=CreatErrorMapModel(input_shape=img_dim,lastLayerActivation=lastLayerActivation, PercentageOfTrianable=PercentageOfTrianable)
+for i in range(0,26,5):
+	model.load_weights('../../models/'+modelDir+'/'+ modelPrefix+'gen_weights_epoch%d.h5' % i) #gen_weights_epoch45.h5
+	dmap = model.predict(img)[0]
+	print (dep[0][0][0])
+	print (dep.shape)
+	print (dmap[0][0])
+	print(img[0][0][0])
+	cv2.imwrite( tesDir+"/"+modelDir+"/test_%d.jpg" % i,np.hstack((dmap*255,dep[0]*255)))
 
 print ("Image to Depth is calculated here")

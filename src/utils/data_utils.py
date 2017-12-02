@@ -67,7 +67,7 @@ def load_data(image_data_format):
 
         X_sketch_train = hf["depths"][:5].astype(np.float32)
         X_sketch_train = normalization(X_sketch_train)
-        print X_full_train.shape
+        print (X_full_train.shape)
 
         return X_full_train, X_sketch_train
 
