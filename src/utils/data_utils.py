@@ -4,8 +4,9 @@ import numpy as np
 import h5py
 import cv2
 
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pylab as plt
-
 
 def normalization(X):
 
