@@ -1,0 +1,11 @@
+#main-content{
+    margin-top:80px;
+}
+
+img{
+    height:500px;
+    width:400px;
+    border: 2px solid;
+    padding: 2px;
+    margin: 15px;
+}

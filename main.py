@@ -4,13 +4,16 @@ import cv2
 import sys
 import os
 import numpy as np
+import cv2
+from keras.applications.resnet50 import preprocess_input
+from keras.models import load_model
 
-img_dim = 256
+img_dim = 224
 bn_mode = 2
 batch_size = 1
-model_name = "generator_unet_upsampling"
-model = generator_unet_upsampling((256,256,3), bn_mode, batch_size)
-model.load_weights('weights/gen_weights_epoch125.h5')
+# model_name = "generator_unet_upsampling"
+# model = generator_unet_upsampling((256,256,3), bn_mode, batch_size)
+# model.load_weights('weights/gen_weights_epoch125.h5')
 output_path = 'static/results'
 
 def process_rgb(path):
@@ -55,3 +58,20 @@ def portrait_mode(path,outputPath):
     cv2.imwrite(outputPath+'/potrait.jpg', new_image)
     return os.path.join(outputPath,'potrait.jpg')
 
+
+def get_depth_map(input_image, model):
+    pred_dep = model.predict(np.array([input_image]), batch_size=1)[0]*255.
+    return pred_dep
+
+def pix2depth(path):
+    print path
+    originalImage = cv2.imread(path)
+    originalImage = np.expand_dims(cv2.resize(originalImage,(img_dim,img_dim)), axis=0)
+    print originalImage.shape
+    x = preprocess_input(originalImage/1.)
+    model = load_model('weights/model_resglass.h5')
+    model.summary()
+    p1 = get_depth_map(x, model)
+    output_file = os.path.join(os.path.join(output_path,'test.jpg'))
+    cv2.imwrite(output_file,p1)
+    return output_file

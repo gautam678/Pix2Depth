@@ -1,5 +1,5 @@
 from flask import Flask, render_template,request
-from main import process_rgb
+from main import process_rgb,pix2depth
 import json
 import os
 
@@ -10,7 +10,6 @@ def main():
     if request.method == 'POST':
         file = request.files['image']
         input_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)
         file.save(input_path)
         result_path = process_rgb(input_path)
         img_left = str(input_path)
@@ -26,7 +25,6 @@ def depth():
     if request.method == 'POST':
         file = request.files['image']
         f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)
         file.save(f)
         img_left = str(f)
         img_right = str(f)
@@ -41,10 +39,11 @@ def potrait():
     if request.method == 'POST':
         file = request.files['image']
         f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)
         file.save(f)
+        # Perform depth conversion
+        result_path = pix2depth(f)
         img_left = str(f)
-        img_right = str(f)
+        img_right = str(result_path)
     else:
         img_left = os.path.join(app.config['UPLOAD_FOLDER'], 'profile.png')
         img_right = os.path.join(app.config['UPLOAD_FOLDER'], 'profile.png')
