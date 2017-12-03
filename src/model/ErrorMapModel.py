@@ -25,7 +25,7 @@ import keras.backend as K
 from math import pow
 #STOP_LAYER=79
 def customLoss(yTrue,yPred):
-    return K.mean(K.square((K.log(yTrue) - K.log(yPred)))-(0.5/pow(K.count_params(yTrue)))*K.sum((K.log(yTrue) - K.log(yPred))
+    return K.mean(K.square((K.log(yTrue) - K.log(yPred)))-(0.5/pow(K.count_params(yTrue),2))*K.sum((K.log(yTrue) - K.log(yPred))
 
 def CreatErrorMapModel(input_shape, lastLayerActivation='hard_sigmoid', PercentageOfTrianable=70, bnAtTheend=True, lossFunction="mean_absolute_error"):
     STOP_LAYER=149

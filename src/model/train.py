@@ -10,11 +10,11 @@ import keras.backend as K
 sys.path.append("../utils")
 import general_utils
 import data_utils
-
+from ErrorMapModel import customLoss
 
 def l1_loss(y_true, y_pred):
-    return K.sum(K.abs(y_pred - y_true), axis=-1)
-
+#    return K.sum(K.abs(y_pred - y_true), axis=-1)
+     return customLoss( y_true,y_pred)
 
 def train(**kwargs):
     """
@@ -74,7 +74,7 @@ def train(**kwargs):
                                           use_mbd,
                                           batch_size)
 
-        generator_model.compile(loss='mae', optimizer=opt_discriminator)
+        generator_model.compile(loss=L1_loss, optimizer=opt_discriminator)
         discriminator_model.trainable = False
 
         DCGAN_model = models.DCGAN(generator_model,
@@ -116,7 +116,7 @@ def train(**kwargs):
                 # Update the discriminator
                 disc_loss = discriminator_model.train_on_batch(X_disc, y_disc) # X_disc, y_disc
                 # Create a batch to feed the generator model
-                X_gen_target, X_gen = next(data_utils.facades_generator(img_dim,batch_size=batch_size))
+                X_gen, X_gen_target = next(data_utils.facades_generator(img_dim,batch_size=batch_size))
                 y_gen = np.zeros((X_gen.shape[0], 2), dtype=np.uint8)
                 y_gen[:, 1] = 1
 
