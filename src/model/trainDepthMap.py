@@ -13,7 +13,7 @@ import general_utils
 import data_utils
 
 from ErrorMapModel import CreatErrorMapModel
-
+import shutil
 
 def trainDepthMap(**kwargs):
     """
@@ -48,6 +48,8 @@ def trainDepthMap(**kwargs):
 #-------------------------------------------------------------------------------
          logpath=os.path.join('../../log','DepthMapWith'+lastLayerActivation+str(PercentageOfTrianable)+'UnTr'+SpecificPathStr)
          modelPath=os.path.join('../../models','DepthMapwith'+lastLayerActivation+str(PercentageOfTrianable)+'Untr'+SpecificPathStr)
+         shutil.rmtree(logpath, ignore_errors=True)
+         shutil.rmtree(modelPath, ignore_errors=True)
          os.makedirs(logpath, exist_ok=True)
          os.makedirs(modelPath, exist_ok=True)
 
@@ -59,7 +61,7 @@ def trainDepthMap(**kwargs):
          keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.1, patience=2, verbose=1, mode='auto', epsilon=0.0001, cooldown=0, min_lr=0),
          keras.callbacks.TensorBoard(log_dir=logpath, histogram_freq=0, batch_size=batchSize, write_graph=True, write_grads=False, write_images=True, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)],)
          ErrorMap_weights_path = os.path.join(modelPath,'DepthMap_weights.h5' )
-         whole_model.save_weights(ErrorMap_weights_path, overwrite=True)
+         generator_model.save_weights(ErrorMap_weights_path, overwrite=True)
          plt.plot(history.history['loss'])
          plt.savefig(PlotPath,bbox_inches='tight')
 #------------------------------------------------------------------------------------

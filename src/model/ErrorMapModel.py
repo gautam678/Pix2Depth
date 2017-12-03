@@ -20,8 +20,14 @@ from keras.models import Sequential
 from keras.layers import Dropout, Flatten, Dense,Input,concatenate,Maximum,Conv2D,Deconv2D, ZeroPadding2D, UpSampling2D
 from keras.models import Model
 from keras.layers.normalization import BatchNormalization
+from sklearn.metrics import mean_absolute_error
+import keras.backend as K
+from math import pow
 #STOP_LAYER=79
-def CreatErrorMapModel(input_shape, lastLayerActivation='hard_sigmoid', PercentageOfTrianable=70):
+def customLoss(yTrue,yPred):
+    return K.mean(K.square((K.log(yTrue) - K.log(yPred)))-(0.5/pow(K.count_params(yTrue)))*K.sum((K.log(yTrue) - K.log(yPred))
+
+def CreatErrorMapModel(input_shape, lastLayerActivation='hard_sigmoid', PercentageOfTrianable=70, bnAtTheend=True, lossFunction="mean_absolute_error"):
     STOP_LAYER=149
     print(STOP_LAYER)
     img_dim = (256,256,3)
@@ -53,13 +59,13 @@ def CreatErrorMapModel(input_shape, lastLayerActivation='hard_sigmoid', Percenta
 #    x=BatchNormalization()(x)
 
     x = Deconv2D(3, (3, 3), strides=(2, 2), padding="same",  activation=lastLayerActivation)(x)
-    x=BatchNormalization()(x)
+    if (bnAtTheend==True):
+        x=BatchNormalization()(x)
 
     whole_model = Model(BaseModel.input, outputs=x)
 #    print (resnet.layers)
     
     p=int((PercentageOfTrianable/100)*len(whole_model.layers))
-    p=120
     print(len(whole_model.layers), p)
     for layer in whole_model.layers[:p]:
     	layer.trainable = False
@@ -68,6 +74,8 @@ def CreatErrorMapModel(input_shape, lastLayerActivation='hard_sigmoid', Percenta
     	print(i,"  ",l," ",l.output_shape,"\n")
 
 #    whole_model.summary() 
-    whole_model.compile(loss='mean_absolute_error',optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), metrics=['mae', 'acc'])
+    if(lossFunction==):
+    	lossFunction=customLoss
+    whole_model.compile(loss=lossFunction,optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), metrics=['mae', 'acc'])
     return  whole_model
 
