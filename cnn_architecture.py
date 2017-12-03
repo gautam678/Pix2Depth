@@ -3,9 +3,12 @@
 import cv2
 import numpy as np
 from glob import glob
-import sys
+import sys, os
 from keras.optimizers import SGD
 from keras.layers import Conv2D, Input, MaxPooling2D as Pool, BatchNormalization as BN, UpSampling2D
+from keras.applications.resnet50 import ResNet50, preprocess_input
+from keras.models import Model
+import keras.backend as K
 
 rgbImagePaths = sorted(glob('imgs/*'))
 depImagePaths = sorted(glob('deps/*'))
@@ -16,13 +19,10 @@ depPath = 'deps/'
 def read_image(i):
     rPath = rgbPath+'img_%d.jpg' % i
     dPath = depPath+'dep_%d.jpg' % i
-    return cv2.imread(rPath)/255., np.expand_dims(cv2.imread(dPath, 0),-1)/255.
+    return preprocess_input(cv2.imread(rPath)/1.), np.expand_dims(cv2.imread(dPath, 0),-1)/255.
 
 images = map(read_image, range(1449))
 X, Y = map(np.array, zip(*images))
-
-from keras.models import Model
-UpSampling2D((2,2))
 
 def model_1():
     input_layer = Input(shape=(224,224,3))
@@ -85,7 +85,6 @@ def model_2():
 def model_3():
 
     input_layer = Input(shape=(224,224,3))
-    from keras.applications.resnet50 import ResNet50, preprocess_input
     from keras.layers import Conv2DTranspose as DeConv
     resnet = ResNet50(include_top=False, weights="imagenet")
     resnet.trainable = False
@@ -108,24 +107,39 @@ def model_3():
     model = Model(inputs=input_layer, outputs=conv)
     return model
 
-model_num = int(sys.argv[1])
-model_name = ['hourglass','block','resglass'][model_num - 1]
-if model_num == 1:
-    model = model_1()
-elif model_num == 2:
-    model = model_2()
-else:
-    model = model_3()
-model.summary()
+if __name__ == "__main__":
+    model_num = int(sys.argv[1])
+    model_name = ['hourglass','block','resglass'][model_num - 1]
+    if model_num == 1:
+        model = model_1()
+    elif model_num == 2:
+        model = model_2()
+    else:
+        model = model_3()
+    model.summary()
 
-print X.shape, Y.shape
-print 'Training ...'
+    print X.shape, Y.shape
+    print 'Training ...'
 
-lr = 1.0
-for i in range(2000):
-    print i
-    cv2.imwrite("preds/model_{}_ep_{}.jpg".format(model_name, i), model.predict(X[:1])[0]*255.)
-    model.compile(loss="mse", optimizer=SGD(lr=lr, decay=1e-2))
-    model.fit(X,Y, epochs=5)
-    lr *= 0.95
-    model.save_weights('weights_%s.h5' % model_name)
+    out_folder = 'preds_final'
+    if not os.path.exists(out_folder):
+        os.makedirs(out_folder)
+    weightsPath = 'weigts_%s.h5' % model_name
+
+    lr = 1.0
+
+    if os.path.exists(weightsPath):
+        model.load_weights(weightsPath)
+        lr /= 10
+
+    for i in range(20):
+        print i
+        model.compile(loss="mse", optimizer=SGD(lr=lr, decay=1e-2))
+        model.fit(X,Y, epochs=10, verbose=1)
+        lr *= 0.95
+        model.save_weights('weights_%s.h5' % model_name)
+        img_gray = np.expand_dims(np.mean(X[0]*255., axis=-1), -1)
+        gt_dep = Y[0]*255.
+        pred_dep = model.predict(X[:1])[0]*255.
+        print img_gray.shape, gt_dep.shape, pred_dep.shape
+        cv2.imwrite("{}/model_{}_ep_{}.jpg".format(out_folder, model_name, i), np.hstack((img_gray, gt_dep, pred_dep)))
