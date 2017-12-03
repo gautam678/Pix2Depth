@@ -21,32 +21,6 @@ def lambda_output(input_shape):
     return input_shape[:2]
 
 
-# def conv_block_unet(x, f, name, bn_mode, bn_axis, bn=True, dropout=False, strides=(2,2)):
-
-#     x = Conv2D(f, (3, 3), strides=strides, name=name, padding="same")(x)
-#     if bn:
-#         x = BatchNormalization(axis=bn_axis)(x)
-#     x = LeakyReLU(0.2)(x)
-#     if dropout:
-#         x = Dropout(0.5)(x)
-
-#     return x
-
-
-# def up_conv_block_unet(x1, x2, f, name, bn_mode, bn_axis, bn=True, dropout=False):
-
-#     x1 = UpSampling2D(size=(2, 2))(x1)
-#     x = merge([x1, x2], mode="concat", concat_axis=bn_axis)
-
-#     x = Conv2D(f, (3, 3), name=name, padding="same")(x)
-#     if bn:
-#         x = BatchNormalization(axis=bn_axis)(x)
-#     x = Activation("relu")(x)
-#     if dropout:
-#         x = Dropout(0.5)(x)
-
-#     return x
-
 def conv_block_unet(x, f, name, bn_mode, bn_axis, bn=True, strides=(2,2)):
 
     x = LeakyReLU(0.2)(x)
@@ -132,7 +106,8 @@ def generator_unet_upsampling(img_dim, bn_mode, model_name="generator_unet_upsam
 
     x = Activation("relu")(list_decoder[-1])
     x = UpSampling2D(size=(2, 2))(x)
-    x = Conv2D(nb_channels, (3, 3), name="last_conv", padding="same")(x)
+    ###x = Conv2D(nb_channels, (3, 3), name="last_conv", padding="same")(x)
+    x = Conv2D(1, (3, 3), name="last_conv", padding="same")(x)
     x = Activation("tanh")(x)
 
     generator_unet = Model(inputs=[unet_input], outputs=[x])
