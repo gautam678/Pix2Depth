@@ -1,5 +1,4 @@
-i
-port os
+import os
 import sys
 import time
 import numpy as np
@@ -13,7 +12,7 @@ sys.path.append("../utils")
 import general_utils
 import data_utils
 
-from ErrorMapModel import CreatErrorMapModel:wq
+from ErrorMapModel import CreatErrorMapModel
 import shutil
 
 def trainDepthMap(**kwargs):
@@ -37,6 +36,8 @@ def trainDepthMap(**kwargs):
     lossFunction=kwargs["lossFunction"]
     if(kwargs["bnAtTheend"]!="True"):
          bnAtTheend=False
+    else:
+         bnAtTheend=True
     # Setup environment (logging directory etc)
     #general_utils.setup_logging(model_name)
 
@@ -47,8 +48,9 @@ def trainDepthMap(**kwargs):
  
 
     try:
+         print("Ok before directory this point")
          generator_model=CreatErrorMapModel(input_shape=img_dim,lastLayerActivation=lastLayerActivation, PercentageOfTrianable=PercentageOfTrianable, bnAtTheend=bnAtTheend,lossFunction=lossFunction)
-
+         print("Ok before directory this point")
 #-------------------------------------------------------------------------------
          logpath=os.path.join('../../log','DepthMapWith'+lastLayerActivation+str(PercentageOfTrianable)+'UnTr'+SpecificPathStr)
          modelPath=os.path.join('../../models','DepthMapwith'+lastLayerActivation+str(PercentageOfTrianable)+'Untr'+SpecificPathStr)
@@ -56,18 +58,19 @@ def trainDepthMap(**kwargs):
          shutil.rmtree(modelPath, ignore_errors=True)
          os.makedirs(logpath, exist_ok=True)
          os.makedirs(modelPath, exist_ok=True)
+         print("Ok until this point")
 
 #-----------------------PreTraining Depth Map-------------------------------------
          batchSize=batch_size
-         history=generator_model.fit_generator(data_utils.facades_generator(img_dim,batch_size=batch_size), samples_per_epoch=nb_train_samples,epochs=epochs,validation_data=data_utils.facades_generator(img_dim,batch_size=batch_size),nb_val_samples=nb_validation_samples,callbacks=[
+         history=generator_model.fit_generator(data_utils.facades_generator(img_dim,batch_size=batch_size), samples_per_epoch=nb_train_samples,epochs=epochs,verbose=1,validation_data=data_utils.facades_generator(img_dim,batch_size=batch_size),nb_val_samples=nb_validation_samples,callbacks=[
          keras.callbacks.ModelCheckpoint(os.path.join(modelPath,'DepthMap_weightsBestLoss.h5'), monitor='val_loss', verbose=1, save_best_only=True),
          keras.callbacks.ModelCheckpoint(os.path.join(modelPath,'DepthMap_weightsBestAcc.h5'), monitor='acc', verbose=1, save_best_only=True),
          keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.1, patience=2, verbose=1, mode='auto', epsilon=0.0001, cooldown=0, min_lr=0),
-         keras.callbacks.TensorBoard(log_dir=logpath, histogram_freq=0, batch_size=batchSize, write_graph=True, write_grads=False, write_images=True, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)],)
+         keras.callbacks.TensorBoard(log_dir=logpath, histogram_freq=0, batch_size=batchSize, write_graph=True, write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)],)
          ErrorMap_weights_path = os.path.join(modelPath,'DepthMap_weights.h5' )
          generator_model.save_weights(ErrorMap_weights_path, overwrite=True)
          plt.plot(history.history['loss'])
-         plt.savefig(logpath+"history.png",bbox_inches='tight')
+         plt.savefig(logpath+"/history.png",bbox_inches='tight')
 #------------------------------------------------------------------------------------
     except KeyboardInterrupt:
         pass

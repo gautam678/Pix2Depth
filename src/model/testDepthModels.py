@@ -59,11 +59,12 @@ for i in range(args.NumberOfTestImages):
 	img, dep = next(gen)
 #	cv2.imwrite("real.jpg",img[0]*255)
 	dmap = model.predict(img)[0]
+#	dmap[:][0] =dmap[:][1]=dmap[:][2]= (model.predict(img)[0][:][0]+model.predict(img)[0][:][1]+model.predict(img)[0][:][2])/3
 	print ("depth:",dep[0][0][0])
 	print (dep.shape)
 	print ("predicted depth:",dmap[0][0])
 	print("image:",img[0][0][0])
-	cv2.imwrite( imagesPath+"/test_%d.jpg" % i,np.hstack(( img[0]*255,dmap*125,dep[0]*255)))
+	cv2.imwrite( imagesPath+"/test_%d.jpg" % i,np.hstack(( img[0]*255,np.multiply(dmap,dmap)*125,dep[0]*255)))
 #	cv2.imwrite( imagesPath+"/test_%d.jpg" % i,np.hstack(( img[0]*255,dmap*255,dep[0]*255)))
 
 print ("Image to Depth is calculated here")
