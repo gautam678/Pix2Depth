@@ -14,6 +14,7 @@ from ErrorMapModel import customLoss
 
 def l1_loss(y_true, y_pred):
 #    return K.sum(K.abs(y_pred - y_true), axis=-1)
+     print("in loss function shape",y_true.shape)
      return customLoss( y_true,y_pred)
 
 def train(**kwargs):
@@ -73,7 +74,7 @@ def train(**kwargs):
                                           use_mbd,
                                           batch_size)
 
-        generator_model.compile(loss=L1_loss, optimizer=opt_discriminator)
+        generator_model.compile(loss="mae", optimizer=opt_discriminator)
         discriminator_model.trainable = False
 
         DCGAN_model = models.DCGAN(generator_model,
@@ -91,8 +92,7 @@ def train(**kwargs):
 
         gen_loss = 100
         disc_loss = 100
-        best_loss=100
-        best_model=None
+        best_loss=[100]*3
 
         # Start training
         print("Start training")
@@ -104,6 +104,8 @@ def train(**kwargs):
 
             for X_full_batch, X_sketch_batch in data_utils.facades_generator(img_dim,batch_size=batch_size):
 
+                X_gen, X_gen_target = next(data_utils.facades_generator(img_dim,batch_size=batch_size))
+                generator_model.train_on_batch(X_gen, X_gen_target)
                 # Create a batch to feed the discriminator model
                 X_disc, y_disc = data_utils.get_disc_batch(X_full_batch,
                                                            X_sketch_batch,
@@ -147,19 +149,23 @@ def train(**kwargs):
             print('Epoch %s/%s, Time: %s' % (e + 1, nb_epoch, time.time() - start))
 
             if e % 5 == 0:
-                gen_weights_path = os.path.join('../models/%s/gen_weights_epoch%s.h5' % (model_name, e))
+                gen_weights_path = os.path.join('../../models/%s/gen_weights_epoch%s.h5' % (model_name, e))
                 generator_model.save_weights(gen_weights_path, overwrite=True)
 
-                disc_weights_path = os.path.join('../models/%s/disc_weights_epoch%s.h5' % (model_name, e))
+                disc_weights_path = os.path.join('../../models/%s/disc_weights_epoch%s.h5' % (model_name, e))
                 discriminator_model.save_weights(disc_weights_path, overwrite=True)
 
-                DCGAN_weights_path = os.path.join('../models/%s/DCGAN_weights_epoch%s.h5' % (model_name, e))
+                DCGAN_weights_path = os.path.join('../../models/%s/DCGAN_weights_epoch%s.h5' % (model_name, e))
                 DCGAN_model.save_weights(DCGAN_weights_path, overwrite=True)
                 
-                Best_gen_weights_path = os.path.join('../models/%s/best_gen_weights_epoch.h5' % (model_name))
-                if(gen_loss<=best_loss):
-                        generator_model.save_weights(best_gen_weights_path, overwrite=True)
-                        best_loss=gen_loss
+                Best_gen_L1_weights_path = os.path.join('../../models/%s/best_gen_L1_weights_epoch.h5' % (model_name))
+                if(gen_loss[1]<=best_loss[1]):
+                        generator_model.save_weights(Best_gen_L1_weights_path, overwrite=True)
+                        best_loss[1]=gen_loss[1]
+                Best_gen_Totweights_path = os.path.join('../../models/%s/best_gen_Totweights_epoch.h5' % (model_name))
+                if(gen_loss[0]<=best_loss[0]):
+                        generator_model.save_weights(Best_gen_Totweights_path, overwrite=True)
+                        best_loss[0]=gen_loss[0]
                          
 
     except KeyboardInterrupt:
