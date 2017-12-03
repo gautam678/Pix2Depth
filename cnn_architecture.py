@@ -134,12 +134,13 @@ if __name__ == "__main__":
 
     for i in range(20):
         print i
-        model.compile(loss="mse", optimizer=SGD(lr=lr, decay=1e-2))
-        model.fit(X,Y, epochs=10, verbose=1)
-        lr *= 0.95
-        model.save_weights('weights_%s.h5' % model_name)
-        img_gray = np.expand_dims(np.mean(X[0]*255., axis=-1), -1)
+        img_gray = np.expand_dims(np.mean(X[0], axis=-1).astype(np.int), axis=-1)
         gt_dep = Y[0]*255.
         pred_dep = model.predict(X[:1])[0]*255.
         print img_gray.shape, gt_dep.shape, pred_dep.shape
         cv2.imwrite("{}/model_{}_ep_{}.jpg".format(out_folder, model_name, i), np.hstack((img_gray, gt_dep, pred_dep)))
+        model.compile(loss="mse", optimizer=SGD(lr=lr, decay=1e-2))
+        model.fit(X,Y, epochs=10, verbose=1)
+        lr *= 0.95
+        model.save_weights('weights_%s.h5' % model_name)
+        model.save('model_%s.h5' % model_name)
