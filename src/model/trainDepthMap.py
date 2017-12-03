@@ -67,7 +67,7 @@ def trainDepthMap(**kwargs):
          ErrorMap_weights_path = os.path.join(modelPath,'DepthMap_weights.h5' )
          generator_model.save_weights(ErrorMap_weights_path, overwrite=True)
          plt.plot(history.history['loss'])
-         plt.savefig(PlotPath,bbox_inches='tight')
+         plt.savefig(logpath+"history.png",bbox_inches='tight')
 #------------------------------------------------------------------------------------
     except KeyboardInterrupt:
         pass
