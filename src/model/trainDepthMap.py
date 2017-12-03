@@ -1,4 +1,5 @@
-import os
+i
+port os
 import sys
 import time
 import numpy as np
@@ -12,7 +13,7 @@ sys.path.append("../utils")
 import general_utils
 import data_utils
 
-from ErrorMapModel import CreatErrorMapModel
+from ErrorMapModel import CreatErrorMapModel:wq
 import shutil
 
 def trainDepthMap(**kwargs):
@@ -33,6 +34,9 @@ def trainDepthMap(**kwargs):
     lastLayerActivation=kwargs["lastLayerActivation"]
     PercentageOfTrianable=kwargs["PercentageOfTrianable"]
     SpecificPathStr=kwargs["SpecificPathStr"]
+    lossFunction=kwargs["lossFunction"]
+    if(kwargs["bnAtTheend"]!="True"):
+         bnAtTheend=False
     # Setup environment (logging directory etc)
     #general_utils.setup_logging(model_name)
 

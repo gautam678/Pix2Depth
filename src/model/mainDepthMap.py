@@ -18,6 +18,8 @@ if __name__ == "__main__":
     parser.add_argument('--lastLayerActivation', type=str, default='relu', help="Activation of the lastLayer")
     parser.add_argument('--PercentageOfTrianable', type=int, default=50, help="Percentage of Triantable Layers")
     parser.add_argument('--SpecificPathStr', type=str, default='Org', help="PathStr")
+    parser.add_argument('--lossFunction', type=str, default="mean_absolute_error", help="Loss function")
+    parser.add_argument('--bnAtTheend', type=str, default="True", help="have batch normaliation at the last layer?")
     args = parser.parse_args()
 
     # Set the backend by modifying the env variable
@@ -43,6 +45,8 @@ if __name__ == "__main__":
                 "lastLayerActivation":args.lastLayerActivation,
                 "PercentageOfTrianable":args.PercentageOfTrianable,
                 "SpecificPathStr":args.SpecificPathStr,
+                "bnAtTheend":args.bnAtTheend,
+                "lossFunction":args.lossFunction
 
                 }
 

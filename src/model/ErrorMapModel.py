@@ -74,7 +74,7 @@ def CreatErrorMapModel(input_shape, lastLayerActivation='hard_sigmoid', Percenta
     	print(i,"  ",l," ",l.output_shape,"\n")
 
 #    whole_model.summary() 
-    if(lossFunction==):
+    if(lossFunction=="customLoss"):
     	lossFunction=customLoss
     whole_model.compile(loss=lossFunction,optimizer=optimizers.SGD(lr=1e-4, momentum=0.9), metrics=['mae', 'acc'])
     return  whole_model
