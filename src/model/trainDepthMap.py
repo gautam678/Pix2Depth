@@ -47,7 +47,7 @@ def trainDepthMap(**kwargs):
  
 
     try:
-         generator_model=CreatErrorMapModel(input_shape=img_dim,lastLayerActivation=lastLayerActivation, PercentageOfTrianable=PercentageOfTrianable)
+         generator_model=CreatErrorMapModel(input_shape=img_dim,lastLayerActivation=lastLayerActivation, PercentageOfTrianable=PercentageOfTrianable, bnAtTheend=bnAtTheend,lossFunction=lossFunction)
 
 #-------------------------------------------------------------------------------
          logpath=os.path.join('../../log','DepthMapWith'+lastLayerActivation+str(PercentageOfTrianable)+'UnTr'+SpecificPathStr)
