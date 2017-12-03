@@ -41,7 +41,6 @@ def train(**kwargs):
     use_mbd = kwargs["use_mbd"]
 
     epoch_size = n_batch_per_epoch * batch_size
-
     # Setup environment (logging directory etc)
     #general_utils.setup_logging(model_name)
 
@@ -92,6 +91,8 @@ def train(**kwargs):
 
         gen_loss = 100
         disc_loss = 100
+        best_loss=100
+        best_model=None
 
         # Start training
         print("Start training")
@@ -154,6 +155,12 @@ def train(**kwargs):
 
                 DCGAN_weights_path = os.path.join('../models/%s/DCGAN_weights_epoch%s.h5' % (model_name, e))
                 DCGAN_model.save_weights(DCGAN_weights_path, overwrite=True)
+                
+                Best_gen_weights_path = os.path.join('../models/%s/best_gen_weights_epoch.h5' % (model_name))
+                if(gen_loss<=best_loss):
+                        generator_model.save_weights(best_gen_weights_path, overwrite=True)
+                        best_loss=gen_loss
+                         
 
     except KeyboardInterrupt:
         pass
