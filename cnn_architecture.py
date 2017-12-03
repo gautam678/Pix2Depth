@@ -126,7 +126,7 @@ if __name__ == "__main__":
         os.makedirs(out_folder)
     weightsPath = 'weigts_%s.h5' % model_name
 
-    lr = 1.0
+    lr = 0.1
 
     if os.path.exists(weightsPath):
         model.load_weights(weightsPath)

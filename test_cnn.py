@@ -11,7 +11,7 @@ def get_depth_map(input_image, model):
     return pred_dep
 
 def test_1():
-    _id = 1000
+    _id = 112
     originalImage = cv2.imread('imgs/img_%d.jpg' % _id)
     x = preprocess_input(originalImage/1.)
     cv2.imwrite('_testImage.jpg', x)
