@@ -2,10 +2,11 @@ from flask import Flask, render_template,request
 from main import pix2depth,portrait_mode
 import json
 import os
+from config import CONFIG
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join('static/uploads')
-development = True
+
 @app.route("/",methods=['GET', 'POST'])
 def main():
     if request.method == 'POST':
@@ -63,4 +64,5 @@ def portrait():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    development = CONFIG['development']
+    app.run(debug=CONFIG['development'], host=CONFIG['host'], port=CONFIG['port'])
