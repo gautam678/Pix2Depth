@@ -7,23 +7,31 @@ import numpy as np
 import cv2
 from keras.applications.resnet50 import preprocess_input
 from keras.models import load_model
+from config import CONFIG
 
 img_dim = 224
 output_path = 'static/results'
+if not CONFIG['development']:
+    # print 'Loading p2d_model'
+    # p2d_model = load_model('weights/model_resglass.h5')
 
-print 'Loading p2d_model'
-p2d_model = load_model('weights/siva.h5')
-
-print 'Loading d2p_model'
-d2p_model = load_model('weights/siva.h5')
-
+    # print 'Loading d2p_model'
+    # d2p_model = load_model('weights/model_resglass.h5')
+    
+    print 'Loading d2p_model'
+    p2d_pix2pix = load_model('weights/pix2pix_depth.h5')
+    
+    print 'Loading d2p_model'
+    d2p_pix2pix = load_model('weights/pix2pix_depth.h5')
+    
 # First Page
-def pix2depth(path):
+def pix2depth(path,model):
     model_name = 'p2d'
     originalImage = cv2.imread(path)
     originalImage = cv2.resize(originalImage,(img_dim,img_dim))
+    print model
     x = preprocess_input(originalImage/1.)
-    p1 = get_depth_map(x, p2d_model)
+    p1 = get_depth_map(x, model)
     file_name = model_name+'_'+path.split('/')[-1]
     output_file = os.path.join(output_path,file_name)
     cv2.imwrite(output_file,p1)

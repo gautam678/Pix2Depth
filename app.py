@@ -11,10 +11,11 @@ app.config['UPLOAD_FOLDER'] = os.path.join('static/uploads')
 def main():
     if request.method == 'POST':
         file = request.files['image']
+        model_name = request.form['model']
         input_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(input_path)
         if not development:
-            result_path = pix2depth(input_path)
+            result_path = pix2depth(input_path,CONFIG['model'][model_name])
         else:
             result_path = str(input_path)
         img_left = str(input_path)

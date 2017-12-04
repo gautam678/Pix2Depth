@@ -6,3 +6,4 @@ figures/
 static/uploads/*
 static/results/*
 *.h5
+config.py
