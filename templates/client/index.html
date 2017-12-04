@@ -51,14 +51,10 @@
           <div class="row">
             <span class="btn btn-default btn-file">
               <input type="file" name="image">
-              <input type="radio" id="model1" name="model" value = "pix2pix">
-              <label for="model1">Email</label>
-
-              <input type="radio" id="model2" name="model" value = "cycleGAN">
-              <label for="model2">Phone</label>
-
-              <input type="radio" id="model3" name="model" value = "hourglass">
-              <label for="model3">Mail</label>
+              {% for button in options %}
+              <input type="radio" id="model1" name="model" value = {{button}}>
+              <label for="model1">{{options[button]}}</label>
+              {% endfor %}
             </span>
             <input type="submit" value="Upload" class="btn btn-primary">
           </div>

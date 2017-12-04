@@ -51,6 +51,10 @@
           <div class="row">
             <span class="btn btn-default btn-file">
               <input type="file" name="image">
+              {% for button in options %}
+              <input type="radio" id="model1" name="model" value = {{button}}>
+              <label for="model1">{{options[button]}}</label>
+              {% endfor %}
             </span>
             <input type="submit" value="Upload" class="btn btn-primary">
           </div>

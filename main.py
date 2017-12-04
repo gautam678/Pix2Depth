@@ -11,6 +11,8 @@ from config import CONFIG
 
 img_dim = 224
 output_path = 'static/results'
+
+# Make dictionary
 if not CONFIG['development']:
     # print 'Loading p2d_model'
     # p2d_model = load_model('weights/model_resglass.h5')
@@ -37,7 +39,7 @@ def pix2depth(path,model):
     cv2.imwrite(output_file,p1)
     return output_file
 
-def depth2pix(path):
+def depth2pix(path,model):
     model_name = 'd2p'
     originalImage = cv2.imread(path)
     originalImage = cv2.resize(originalImage,(img_dim,img_dim))
