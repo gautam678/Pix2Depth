@@ -11,6 +11,9 @@ from keras.models import load_model
 img_dim = 224
 output_path = 'static/results'
 
+#p2d_model = load_model('weights/siva.h5')
+#d2p_model = load_model('weights/marzi.h5')
+
 # First Page
 def pix2depth(path):
     originalImage = cv2.imread(path)
