@@ -1,5 +1,5 @@
 from flask import Flask, render_template,request
-from main import pix2depth,portrait_mode
+from main import pix2depth, portrait_mode, depth2pix
 import json
 import os
 from config import CONFIG
@@ -32,7 +32,7 @@ def depth():
         input_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(input_path)
         if not development:
-            result_path = depth2rgb(input_path)
+            result_path = depth2pix(input_path)
         else:
             result_path = str(input_path)
         img_left = str(input_path)
