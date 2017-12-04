@@ -11,43 +11,36 @@ from keras.models import load_model
 img_dim = 224
 output_path = 'static/results'
 
-#p2d_model = load_model('weights/siva.h5')
-#d2p_model = load_model('weights/marzi.h5')
+print 'Loading p2d_model'
+p2d_model = load_model('weights/siva.h5')
+
+print 'Loading d2p_model'
+d2p_model = load_model('weights/siva.h5')
 
 # First Page
 def pix2depth(path):
+    model_name = 'p2d'
     originalImage = cv2.imread(path)
     originalImage = cv2.resize(originalImage,(img_dim,img_dim))
     x = preprocess_input(originalImage/1.)
-    model = load_model('weights/model_resglass.h5' % model_name)
-    p1 = get_depth_map(x, model)
+    p1 = get_depth_map(x, p2d_model)
     file_name = model_name+'_'+path.split('/')[-1]
     output_file = os.path.join(output_path,file_name)
     cv2.imwrite(output_file,p1)
     return output_file
 
 def depth2pix(path):
+    model_name = 'd2p'
     originalImage = cv2.imread(path)
     originalImage = cv2.resize(originalImage,(img_dim,img_dim))
     x = preprocess_input(originalImage/1.)
-    model = load_model('weights/model_resglass.h5' % model_name)
-    p1 = get_depth_map(x, model)
+    p1 = get_depth_map(x, d2p_model)
     file_name = model_name+'_'+path.split('/')[-1]
     output_file = os.path.join(output_path,file_name)
     cv2.imwrite(output_file,p1)
     return output_file
 
-def process(image):
-    image = cv2.GaussianBlur(image,(5,5),0)
-    return image
-
-def mask(image):
-    image = np.dot(image[...,:3], [0.299, 0.587, 0.114])
-    thresh = 150
-    im_bw = cv2.threshold(image, thresh, 255, cv2.THRESH_BINARY)[1]
-    return im_bw
-
-def portrait_mode(image, depthImage, outputPath):
+def blur_effect(image, depthImage, outputPath):
     try:
         blurredImage = cv2.GaussianBlur(image,(5,5),0)
         # Need path to depth Image
@@ -77,17 +70,14 @@ def get_depth_map(input_image, model):
     return pred_dep
 
 # Potrait Mode
-def portrait_mode(path, model_name="siva"):
+def portrait_mode(path, model_name='p2d'):
     originalImage = cv2.imread(path)
-    img_dim = 256 if model_name != 'siva' else 224
     originalImage = cv2.resize(originalImage,(img_dim,img_dim))
     x = preprocess_input(originalImage/1.)
-    model = load_model('weights/model_resglass.h5' % model_name)
-    model.summary()
-    p1 = get_depth_map(x, model)
+    p1 = get_depth_map(x, p2d_model)
     file_name = model_name+'_'+path.split('/')[-1]
     output_file = os.path.join(output_path,file_name)
     cv2.imwrite(output_file,p1)
     portrait_out_path = os.path.join(output_path, 'portrait_'+file_name)
-    if portrait_mode(originalImage, p1, portrait_out_path):
+    if blur_effect(originalImage, p1, portrait_out_path):
         return portrait_out_path 
