@@ -19,22 +19,22 @@ if not CONFIG['development']:
 
     # print 'Loading d2p_model'
     # d2p_model = load_model('weights/model_resglass.h5')
-    
-    print 'Loading d2p_model'
-    p2d_pix2pix = load_model('weights/pix2pix_depth.h5')
-    
-    print 'Loading d2p_model'
-    d2p_pix2pix = load_model('weights/pix2pix_depth.h5')
-    
-# First Page
+    model_list = {  
+            'pix2depth':{ 
+                'pix2pix' : load_model('weights/p2d_cnn.h5'),
+                'CycleGAN':load_model('weights/p2d_cnn.h5'),
+                'CNN': load_model('weights/p2d_cnn.h5')
+                }
+             }
+
 def pix2depth(path,model):
     model_name = 'p2d'
     originalImage = cv2.imread(path)
     originalImage = cv2.resize(originalImage,(img_dim,img_dim))
-    print model
+    load_model =  model_list['pix2depth'][model]
     x = preprocess_input(originalImage/1.)
-    p1 = get_depth_map(x, model)
-    file_name = model_name+'_'+path.split('/')[-1]
+    p1 = get_depth_map(x, load_model)
+    file_name = model+'_'+path.split('/')[-1]
     output_file = os.path.join(output_path,file_name)
     cv2.imwrite(output_file,p1)
     return output_file
