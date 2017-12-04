@@ -41,7 +41,7 @@ def potrait():
         f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(f)
         # Perform depth conversion
-        result_path = pix2depth(f)
+        result_path = pix2depth(f, 'siva')
         img_left = str(f)
         img_right = str(result_path)
     else:
@@ -52,4 +52,4 @@ def potrait():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8010, host="128.143.63.199")
