@@ -1,22 +1,26 @@
 from flask import Flask, render_template,request
-from main import process_rgb,pix2depth
+from main import pix2depth,portrait_mode
 import json
 import os
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join('static/uploads')
+development = True
 @app.route("/",methods=['GET', 'POST'])
 def main():
     if request.method == 'POST':
         file = request.files['image']
         input_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(input_path)
-        result_path = process_rgb(input_path)
+        if not development:
+            result_path = pix2depth(input_path)
+        else:
+            result_path = str(input_path)
         img_left = str(input_path)
         img_right = str(result_path)
     else:
-        img_left = os.path.join(app.config['UPLOAD_FOLDER'], 'profile.png')
-        img_right = os.path.join(app.config['UPLOAD_FOLDER'], 'profile.png')
+        img_left = os.path.join(app.config['UPLOAD_FOLDER'], 'pix.jpg')
+        img_right = os.path.join(app.config['UPLOAD_FOLDER'], 'depth.jpg')
         
     return render_template('client/index.html',image_left=img_left,image_right=img_right)
 
@@ -24,32 +28,39 @@ def main():
 def depth():
     if request.method == 'POST':
         file = request.files['image']
-        f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        file.save(f)
-        img_left = str(f)
-        img_right = str(f)
+        input_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(input_path)
+        if not development:
+            result_path = depth2rgb(input_path)
+        else:
+            result_path = str(input_path)
+        img_left = str(input_path)
+        img_right = str(result_path)
     else:
-        img_left = os.path.join(app.config['UPLOAD_FOLDER'], 'profile.png')
-        img_right = os.path.join(app.config['UPLOAD_FOLDER'], 'profile.png')
+        img_left = os.path.join(app.config['UPLOAD_FOLDER'], 'depth.jpg')
+        img_right = os.path.join(app.config['UPLOAD_FOLDER'], 'pix.jpg')
         
     return render_template('client/depth.html',image_left=img_left,image_right=img_right)
 
 @app.route("/portrait",methods=['GET', 'POST'])
-def potrait():
+def portrait():
     if request.method == 'POST':
         file = request.files['image']
-        f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        file.save(f)
+        input_path= os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(input_path)
         # Perform depth conversion
-        result_path = pix2depth(f, 'siva')
-        img_left = str(f)
+        if not development:
+            result_path = portrait_mode(input_path, 'siva')
+        else:
+            result_path = str(input_path)
+        img_left = str(input_path)
         img_right = str(result_path)
     else:
-        img_left = os.path.join(app.config['UPLOAD_FOLDER'], 'profile.png')
-        img_right = os.path.join(app.config['UPLOAD_FOLDER'], 'profile.png')
+        img_left = os.path.join(app.config['UPLOAD_FOLDER'], 'pix.jpg')
+        img_right = os.path.join(app.config['UPLOAD_FOLDER'], 'pix.jpg')
         
     return render_template('client/potrait.html',image_left=img_left,image_right=img_right)
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8010, host="128.143.63.199")
+    app.run(debug=True)

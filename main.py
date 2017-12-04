@@ -9,23 +9,29 @@ from keras.applications.resnet50 import preprocess_input
 from keras.models import load_model
 
 img_dim = 224
-bn_mode = 2
-batch_size = 1
-# model_name = "generator_unet_upsampling"
-# model = generator_unet_upsampling((256,256,3), bn_mode, batch_size)
-# model.load_weights('weights/gen_weights_epoch125.h5')
 output_path = 'static/results'
 
-def process_rgb(path):
-    rgb_image = cv2.imread(path)
-    img=np.empty([img_dim,img_dim,3])
-    img[:,:,0] = cv2.resize(rgb_image[2,:,:].T,(img_dim,img_dim))
-    img[:,:,1] = cv2.resize(rgb_image[1,:,:].T,(img_dim,img_dim))
-    img[:,:,2] = cv2.resize(rgb_image[0,:,:].T,(img_dim,img_dim))
-    img = np.expand_dims(img, axis=0)
-    rgb = model.predict(img)[0]
-    output_file = os.path.join(os.path.join(output_path,'test.jpg'))
-    cv2.imwrite(output_file,rgb)
+# First Page
+def pix2depth(path):
+    originalImage = cv2.imread(path)
+    originalImage = cv2.resize(originalImage,(img_dim,img_dim))
+    x = preprocess_input(originalImage/1.)
+    model = load_model('weights/model_resglass.h5' % model_name)
+    p1 = get_depth_map(x, model)
+    file_name = model_name+'_'+path.split('/')[-1]
+    output_file = os.path.join(output_path,file_name)
+    cv2.imwrite(output_file,p1)
+    return output_file
+
+def depth2pix(path):
+    originalImage = cv2.imread(path)
+    originalImage = cv2.resize(originalImage,(img_dim,img_dim))
+    x = preprocess_input(originalImage/1.)
+    model = load_model('weights/model_resglass.h5' % model_name)
+    p1 = get_depth_map(x, model)
+    file_name = model_name+'_'+path.split('/')[-1]
+    output_file = os.path.join(output_path,file_name)
+    cv2.imwrite(output_file,p1)
     return output_file
 
 def process(image):
@@ -67,12 +73,13 @@ def get_depth_map(input_image, model):
     pred_dep = model.predict(np.array([input_image]), batch_size=1)[0]*255.
     return pred_dep
 
-def pix2depth(path, model_name="siva"):
+# Potrait Mode
+def portrait_mode(path, model_name="siva"):
     originalImage = cv2.imread(path)
     img_dim = 256 if model_name != 'siva' else 224
     originalImage = cv2.resize(originalImage,(img_dim,img_dim))
     x = preprocess_input(originalImage/1.)
-    model = load_model('weights/%s.h5' % model_name)
+    model = load_model('weights/model_resglass.h5' % model_name)
     model.summary()
     p1 = get_depth_map(x, model)
     file_name = model_name+'_'+path.split('/')[-1]
