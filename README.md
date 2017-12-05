@@ -1,13 +1,15 @@
+# Pix2Depth - Depth Map Estimation from Monocular Image
 
+<<write about repo>>
 
-# Dataset
+## Dataset
 The dataset for this repo can be downloaded [here](https://cs.nyu.edu/~silberman/datasets/nyu_depth_v2.html).
 
 Place the downloaded file in the folder data/
 
 For the lazy: run download_nyu_dataset.sh to automatically download the data and save in seperate folders.
 
-# Required Packages
+## Required Packages
 * Keras
 * Flask
 * opencv
@@ -15,10 +17,9 @@ For the lazy: run download_nyu_dataset.sh to automatically download the data and
 * PIL
 * numpy
 
-# Running and evaluating
+## Running and evaluating
 
-## Configurations
-### Structure of the config.py 
+### Configurations
 `
 CONFIG = {
         'development': False,
@@ -43,8 +44,11 @@ CONFIG = {
 
 `
 
+### Importing Models
 
-## Running the Application
+### HTML stuff
+
+### Running the Application
 
 `python app.py`
 
@@ -53,11 +57,11 @@ This will start the python server.
 
 **Example:**
 
-## Output
+### Output
 - The weights are stored in the folder weights/ [main.py requires the path to the weights to load the model]
 - The generated images are stored in static/results/ [the images are stored with the name of the model so it's easier to identify results] 
 
-### Additional notes
+## Additional notes
 - Used the following models to train on nyu_depth dataset.
         * [pix2pix](https://github.com/phillipi/pix2pix)
         * [CycleGan](https://github.com/junyanz/CycleGAN)
