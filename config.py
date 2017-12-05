@@ -1,7 +1,7 @@
 CONFIG = {
-        'development': True,
-        'host': 'localhost',
-        'port': 5000,
+        'development': False,
+        'host': '128.143.63.199',
+        'port': 8010,
         'pix2depth':{
                 'first_option':'pix2pix',
                 'second_option':'CycleGAN',
