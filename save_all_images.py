@@ -20,6 +20,7 @@ if not os.path.exists(dep_folder):
 f = h5py.File(matPath)
 
 img_dim = 224
+
 def save_image_dep(image_id):
     i = image_id
     print "Processing",i
@@ -34,8 +35,8 @@ def save_image_dep(image_id):
     depth_[:,:,1] = cv2.resize(depth[:,:].T,(img_dim,img_dim))
     depth_[:,:,2] = cv2.resize(depth[:,:].T,(img_dim,img_dim))
     img_ = img_#/255.0
+    print np.amax(depth_)
     depth_ = 255.*cv2.normalize(depth_, 0, 255, cv2.NORM_MINMAX)
-
 
     cv2.imwrite(os.path.join(img_folder,'img_{}.jpg'.format(i)), img_)
     cv2.imwrite(os.path.join(dep_folder,'dep_{}.jpg'.format(i)), depth_)
