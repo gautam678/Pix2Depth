@@ -7,7 +7,7 @@ The dataset for this repo can be downloaded [here](https://cs.nyu.edu/~silberman
 
 Place the downloaded file in the folder data/
 
-For the lazy: run download_nyu_dataset.sh to automatically download the data and save in seperate folders.
+For the lazy: run download_nyu_dataset.sh to automatically download the dataset. Run  `save_all_images.py` to store the images in seperate folders.
 
 ## Required Packages
 * Keras
@@ -20,7 +20,7 @@ For the lazy: run download_nyu_dataset.sh to automatically download the data and
 ## Running and evaluating
 
 ### Configurations
-`
+```
 CONFIG = {
         'development': False,
         'host': [host],
@@ -42,11 +42,54 @@ CONFIG = {
         }
 }
 
-`
+```
+
+### Configure path to models
+
+Loading the models stored in weights/ can be done inside `main.py` using model_list. This preloads all the models before inference hence saving a lot of time.
+
+```
+ model_list = {  
+            'pix2depth':{ 
+                'pix2pix' : load_model(),
+                'CycleGAN':load_model(),
+                'CNN': load_model(),
+                },
+            'depth2pix':{ 
+                'pix2pix' : load_model(),
+                'CycleGAN':load_model(),
+                }
+             }
+```
+
 
 ### Importing Models
 
+
 ### HTML stuff
+
+This demo requires Bootstrap (version 3). Bootstrap can be served to Flask from the static folder. The structure for storing the web-UI and images being displayed is as follows:
+
+```
+.
+├── static
+   ├── results
+        └── results.jpg
+        .
+        .
+        .
+        └── uploads
+        └── input.jpg
+        .
+        .
+        .
+   └── vendor
+        └── bootstrap
+                └── css
+                └── js
+        └── fonts
+        └── jquery
+```
 
 ### Running the Application
 
