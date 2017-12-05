@@ -72,7 +72,7 @@ def load_data(image_data_format):
         return X_full_train, X_sketch_train
 
 
-def facades_generator(img_dim_tuple,batch_size=10):
+def facades_generator(img_dim_tuple,batch_size=11):
     path = "../../data/nyu_depth_v2_labeled.mat"
     f = h5py.File(path)
     img_dim = img_dim_tuple[0]
@@ -92,7 +92,7 @@ def facades_generator(img_dim_tuple,batch_size=10):
             depth_[:,:,1] = cv2.resize(depth[:,:].T,(img_dim,img_dim))
             depth_[:,:,2] = cv2.resize(depth[:,:].T,(img_dim,img_dim))
             img_ = img_/255.0
-            depth_ = depth_/4.0
+            depth_ = depth_/10.0
             img_batch[index] = img_
             depth_batch[index] = depth_
         yield img_batch,depth_batch

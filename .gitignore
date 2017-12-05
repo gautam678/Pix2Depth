@@ -2,3 +2,8 @@ data/
 figures/
 **/.DS_Store
 *.pyc
+*.jpg
+static/uploads/*
+static/results/*
+*.h5
+config.py

@@ -1,0 +1,35 @@
+#main-content{
+    margin-top:80px;
+}
+
+img{
+    height:500px;
+    width:400px;
+    border: 2px solid;
+    padding: 2px;
+    margin: 15px;
+}
+
+#example_img{
+    height:250px;
+    width:159px;
+}
+h2{
+    font-family: verdana;
+    text-transform: uppercase;
+    font-size: 18px;
+}
+
+h1{
+    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+    font-size: 45px;
+    padding: 10px 10px;
+    text-align: center;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+    
+}
+#header{
+    background-color: #d3e5f2;
+    margin: 3px; padding: 3px;
+}
