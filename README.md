@@ -100,7 +100,12 @@ This demo requires Bootstrap (version 3). Bootstrap can be served to Flask from 
 This will start the python server.
 
 
-**Example:**
+### Examples
+<div style="text-align:center"><img src ="images_readme/first_example.png" /></div>
+<div style="text-align:center"><img src ="images_readme/second_example.png" /></div>
+<div style="text-align:center"><img src ="images_readme/third_example.png" /></div>
+<div style="text-align:center"><img src ="images_readme/fourth_example.png" /></div>
+
 
 ### Output
 - `main.py` requires the path to the weights to load the model. The weights are stored in the folder weights/
