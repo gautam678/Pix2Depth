@@ -1,5 +1,7 @@
 # Pix2Depth - Depth Map Estimation from Monocular Image
 
+<div style="text-align:center"><img src ="images_readme/landing.png" /></div>
+
 <<write about repo>>
 
 ## Dataset
@@ -108,5 +110,5 @@ This will start the python server.
 * Used the following models to train on nyu_depth dataset.
     * [pix2pix](https://github.com/phillipi/pix2pix)
     * [CycleGan](https://github.com/junyanz/CycleGAN)
-    * [Multi Scale CNN](https://github.com/alexhagiopol/multiscale-CNN-classifier]
+    * [Multi Scale CNN](https://github.com/alexhagiopol/multiscale-CNN-classifier)
 
