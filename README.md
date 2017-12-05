@@ -78,7 +78,7 @@ This demo requires Bootstrap (version 3). Bootstrap can be served to Flask from 
         .
         .
         .
-        └── uploads
+    └── uploads
         └── input.jpg
         .
         .
@@ -101,11 +101,11 @@ This will start the python server.
 **Example:**
 
 ### Output
-- The weights are stored in the folder weights/ [main.py requires the path to the weights to load the model]
-- The generated images are stored in static/results/ [the images are stored with the name of the model so it's easier to identify results] 
+- `main.py` requires the path to the weights to load the model. The weights are stored in the folder weights/
+- The images are stored with the name of the model so it's easier to identify results. The generated images are stored in static/results/ 
 
 ## Additional notes
-- Used the following models to train on nyu_depth dataset.
+* Used the following models to train on nyu_depth dataset.
         * [pix2pix](https://github.com/phillipi/pix2pix)
         * [CycleGan](https://github.com/junyanz/CycleGAN)
         * [Multi Scale CNN](https://github.com/alexhagiopol/multiscale-CNN-classifier]
