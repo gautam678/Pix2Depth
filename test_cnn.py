@@ -11,7 +11,7 @@ def get_depth_map(input_image, model):
     return pred_dep
 
 def test_1():
-    _id = 112
+    _id = 9
     originalImage = cv2.imread('imgs/img_%d.jpg' % _id)
     x = preprocess_input(originalImage/1.)
     cv2.imwrite('_testImage.jpg', x)
@@ -20,12 +20,13 @@ def test_1():
     model = model_1()
     model.load_weights('weights_hourglass.h5')
     p1 = get_depth_map(x, model)
+    cv2.imwrite('_p1.jpg', p1)
 
     model = model_3()
     #model = load_model('model_hourglass.h5')
     model.load_weights('weights_resglass.h5')
-    p1 = get_depth_map(x, model)
-    cv2.imwrite('_p3.jpg',p1)
+    p3 = get_depth_map(x, model)
+    cv2.imwrite('_p3.jpg',p3)
 
     y = cv2.imread('_testDep.jpg')
     p1 = cv2.imread('_p1.jpg')

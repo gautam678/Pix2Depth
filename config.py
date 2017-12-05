@@ -10,7 +10,7 @@ CONFIG = {
         'depth2pix':{
                 'first_option':'pix2pix',
                 'second_option':'CycleGAN',
-                'third_option':'CNN'
+                #'third_option':'CNN'
         },
         'portrait':{
                 'first_option': 'pix2pix',
