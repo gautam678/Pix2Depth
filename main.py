@@ -28,7 +28,7 @@ if not CONFIG['development']:
                 },
             'depth2pix':{ 
                 'pix2pix' : load_model('weights/d2p_pix2pix.h5'),
-                # 'CycleGAN':load_model('weights/p2d_cnn.h5'),
+                'CycleGAN':load_model('weights/d2p_cycle.h5'),
                 # 'CNN': load_model('weights/p2d_cnn.h5')
                 }
              }
@@ -73,12 +73,22 @@ def depth2pix(path,model):
     if model =='CNN':
         originalImage = cv2.resize(originalImage,(img_dim,img_dim))
         x = preprocess_input(originalImage/1.)
+    elif model == 'CycleGAN':
+        x = read_image(path)
     else:
         originalImage = cv2.resize(originalImage,(256,256))
         x = originalImage/255.
-    load_model =  model_list['depth2pix'][model]
-    p1 = get_depth_map(x, load_model)
-    file_name = model_name+'_'+path.split('/')[-1]
+    loaded_model =  model_list['depth2pix'][model]
+    p1 = get_depth_map(x, loaded_model)
+    print model
+    if model == 'CycleGAN':
+        p1 /= 2.
+        p1 += 127.5
+        p1 = p1.astype(int)
+        print p1
+        print np.mean(p1)
+        print p1.shape
+    file_name = model+'_'+path.split('/')[-1]
     output_file = os.path.join(output_path,file_name)
     cv2.imwrite(output_file,p1)
     return output_file
