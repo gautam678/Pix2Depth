@@ -30,7 +30,7 @@ if not CONFIG['development']:
                 'pix2pix' : load_model('weights/d2p_pix2pix.h5'),
                 'CycleGAN':load_model('weights/d2p_cycle.h5'),
                 # 'CNN': load_model('weights/p2d_cnn.h5')
-                'MSCNN': load_model('weights/custom.h5')
+                # 'MSCNN': load_model('weights/custom.h5')
                 }
              }
 
