@@ -1,4 +1,5 @@
 #from src.model.models import generator_unet_upsampling
+from PIL import Image
 import h5py
 import cv2
 import sys
@@ -22,7 +23,7 @@ if not CONFIG['development']:
     model_list = {  
             'pix2depth':{ 
                 'pix2pix' : load_model('weights/p2d_pix2pix.h5'),
-                'CycleGAN':load_model('weights/marzi.h5'),
+                'CycleGAN':load_model('weights/p2d_cycle.h5'),
                 'CNN': load_model('weights/p2d_cnn.h5')
                 },
             'depth2pix':{ 
@@ -32,17 +33,35 @@ if not CONFIG['development']:
                 }
              }
 
-def pix2depth(path,model):
+def read_image(fn):
+    loadSize = 143
+    imageSize = 128
+    im = Image.open(fn).convert('RGB')
+    im = im.resize( (loadSize, loadSize), Image.BILINEAR )
+    arr = np.array(im)/255*2-1
+    w1,w2 = (loadSize-imageSize)//2,(loadSize+imageSize)//2
+    h1,h2 = w1,w2
+    img = arr[h1:h2, w1:w2, :]
+    return img
+
+def pix2depth(path, model):
     model_name = 'p2d'
     originalImage = cv2.imread(path)
-    load_model =  model_list['pix2depth'][model]
+    loaded_model =  model_list['pix2depth'][model]
     if model =='CNN':
         originalImage = cv2.resize(originalImage,(img_dim,img_dim))
         x = preprocess_input(originalImage/1.)
+    elif model == 'CycleGAN':
+        x = read_image(path)
     else:
         originalImage = cv2.resize(originalImage,(256,256))
         x = originalImage/255.
-    p1 = get_depth_map(x, load_model)
+    p1 = get_depth_map(x, loaded_model)
+    if model == 'CycleGAN':
+        p1 /= 2
+        p1 += 127
+        p1 = p1.astype(int)
+
     file_name = model+'_'+path.split('/')[-1]
     output_file = os.path.join(output_path,file_name)
     cv2.imwrite(output_file,p1)
@@ -58,8 +77,6 @@ def depth2pix(path,model):
         originalImage = cv2.resize(originalImage,(256,256))
         x = originalImage/255.
     load_model =  model_list['depth2pix'][model]
-    print x
-    print x.shape
     p1 = get_depth_map(x, load_model)
     file_name = model_name+'_'+path.split('/')[-1]
     output_file = os.path.join(output_path,file_name)
@@ -68,12 +85,16 @@ def depth2pix(path,model):
 
 def blur_effect(image, depthImage, outputPath):
     try:
+        if len(depthImage.shape) == 3:
+            depthImage = np.mean(depthImage, axis=-1)
+            print depthImage.shape
         blurredImage = cv2.GaussianBlur(image,(5,5),0)
         # Need path to depth Image
         thresh = 100 
         maskImage = cv2.threshold(depthImage, thresh, 255, cv2.THRESH_BINARY)[1]
         print maskImage.shape
-        new_image = np.zeros((224,224,3),dtype=np.int)
+        (h, w) = depthImage.shape
+        new_image = np.zeros((h, w, 3),dtype=np.int)
         for i in range(len(maskImage)):
             for j in range(len(maskImage[i])):
                 if maskImage[i][j] ==255.0:
@@ -96,13 +117,26 @@ def get_depth_map(input_image, model):
     return pred_dep
 
 # Potrait Mode
-def portrait_mode(path, model_name='p2d'):
+def portrait_mode(path, model):
     originalImage = cv2.imread(path)
-    originalImage = cv2.resize(originalImage,(img_dim,img_dim))
-    x = preprocess_input(originalImage/1.)
-    p1 = get_depth_map(x, p2d_model)
-    file_name = model_name+'_'+path.split('/')[-1]
+    loaded_model =  model_list['pix2depth'][model]
+    if model =='CNN':
+        originalImage = cv2.resize(originalImage,(img_dim,img_dim))
+        x = preprocess_input(originalImage/1.)
+    elif model == 'CycleGAN':
+        x = read_image(path)
+    else:
+        originalImage = cv2.resize(originalImage,(256,256))
+        x = originalImage/255.
+    p1 = get_depth_map(x, loaded_model)
+    if model == 'CycleGAN':
+        p1 /= 2
+        p1 += 127
+        p1 = p1.astype(int)
+
+    file_name = model+'_'+path.split('/')[-1]
     output_file = os.path.join(output_path,file_name)
+
     cv2.imwrite(output_file,p1)
     portrait_out_path = os.path.join(output_path, 'portrait_'+file_name)
     if blur_effect(originalImage, p1, portrait_out_path):
