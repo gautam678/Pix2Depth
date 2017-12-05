@@ -106,7 +106,7 @@ This will start the python server.
 
 ## Additional notes
 * Used the following models to train on nyu_depth dataset.
-        * [pix2pix](https://github.com/phillipi/pix2pix)
-        * [CycleGan](https://github.com/junyanz/CycleGAN)
-        * [Multi Scale CNN](https://github.com/alexhagiopol/multiscale-CNN-classifier]
+ * [pix2pix](https://github.com/phillipi/pix2pix)
+ * [CycleGan](https://github.com/junyanz/CycleGAN)
+ * [Multi Scale CNN](https://github.com/alexhagiopol/multiscale-CNN-classifier]
 
