@@ -22,7 +22,7 @@
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" id="myTopnav">
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="nav navbar-nav">
@@ -48,7 +48,7 @@
     <!-- Page Content -->
     <div class="container" id="main-content">
         <div class="row">
-            <div class="col-lg-12 text-center">
+            <div class="col-lg-12 col-md-12 col-sm-12 text-center">
                 <h1>Examples</h1>
                 <form action="/examples" method="post" enctype="multipart/form-data">
                     <div class="row">
@@ -60,23 +60,23 @@
                   </form>
                 <div class="container" id='header'>
                 <div class="row">
-                    <div class='col-lg-2'>
+                    <div class='col-lg-2 col-md-2 col-sm-2'>
                         <h2>GT RGB</h2>
 
                     </div>
-                    <div class='col-lg-2'>
+                    <div class='col-lg-2 col-md-2 col-sm-2'>
                         <h2>GT Depth</h2>
                     </div>
-                    <div class='col-lg-2'>
+                    <div class='col-lg-2 col-md-2 col-sm-2'>
                         <h2>Fake depth</h2>
                     </div>
-                    <div class='col-lg-2'>
+                    <div class='col-lg-2 col-md-2 col-sm-2'>
                         <h2>Fake RGB</h2>
                     </div>
-                    <div class='col-lg-2'>
+                    <div class='col-lg-2 col-md-2 col-sm-2'>
                         <h2>Cycle RGB</h2>
                     </div>
-                    <div class='col-lg-2'>
+                    <div class='col-lg-2 col-md-2 col-sm-2'>
                         <h2>Cycle Depth</h2>
                     </div>
 
@@ -86,7 +86,8 @@
                     {% for list_images in path %}
                     <div class="row">
                         {% for images in list_images%}
-                        <img src="{{images}}" id='example_img'> {% endfor %}
+                        <img src="{{images}}" id='example_img'> 
+                        {% endfor %}
                     </div>
                     {% endfor %}
                 </div>
