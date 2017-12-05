@@ -68,6 +68,27 @@ def portrait():
         
     return render_template('client/potrait.html',image_left=img_left,image_right=img_right,options = CONFIG['portrait'])
 
+@app.route("/examples",methods=['GET','POST'])
+def example():
+    epoch = str(22)
+    if request.method == 'POST':
+        epoch = request.form['epoch']
+        epoch = str(min([32, int(epoch)]))
+    path = 'http://www.cs.virginia.edu/~ks6cq/cyclegan-1/output/cyclegan/exp_rgb2dep/20171202-023330/imgs/'
+    img = str(0)
+    print epoch
+    populate_page = []
+    image_types = ['input','fake','cyc']
+    a2b = ['A','B']
+    for i in range(0,20):
+        list_of_images=[]
+        for img_type in image_types:
+            for j in a2b:
+                image = path+img_type+j+'_'+epoch+'_'+str(i)+'.jpg'
+                list_of_images.append(image)
+        populate_page.append(list_of_images)
+    return render_template('client/example.html',path = populate_page)
+
 
 if __name__ == "__main__":
     development = CONFIG['development']
