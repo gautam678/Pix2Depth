@@ -79,7 +79,7 @@ Loading the models stored in weights/ can be done inside `main.py` using model_l
 ### Importing Models
 
 
-### HTML stuff
+### Including Bootstrap Components
 
 This demo requires Bootstrap (version 3). Bootstrap can be served to Flask from the static folder. The structure for storing the web-UI and images being displayed is as follows:
 
@@ -107,9 +107,6 @@ This demo requires Bootstrap (version 3). Bootstrap can be served to Flask from 
 ### Running the Application
 
 `python app.py`
-
-This will start the python application.
-
 
 ### Examples
 <div style="text-align:center"><img src ="images_readme/first_example.png" /></div>
