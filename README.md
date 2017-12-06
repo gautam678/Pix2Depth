@@ -2,14 +2,25 @@
 
 <div style="text-align:center"><img src ="images_readme/landing.png" /></div>
 
-<<write about repo>>
+Estimating depth information from stereo images is easy, but does the same work for monocular images?
+We did all the heavylifting so you don't have to do it. We have explored several methods to extract depth from monocular images. Pix2Depth is a culmination of things we've learnt thus far.
+
+Pix2Depth uses several strategies to extract depth from RGB images. Of all the strategies used, Pix2pix and CycleGAN give the best results. Pix2Depth is trained on the NYU Depth Dataset. Pix2Depth is also trained to predict RGB images from depth map.
+
+The web demo for Pix2Depth can be found [here](http://128.143.63.199:8010/)
+
+The web demo has three sections:
+* Pix2Depth - Using the models specified, give Pix2Depth an image and it will try to estimate the depth map.
+* Depth2Pix - From the Models given, Input a depth map and Pix2Depth will predict the estimated colour for the image.
+* Portrait Mode ( work in progress) - After obtaining the depth map, Pix2Depth uses the depth map to blur the background, so objects closer to the camera appear sharper while the background is blurred. This tries to emulate a potrait mode in smartphones without actually using stereo images.
+
 
 ## Dataset
 The dataset for this repo can be downloaded [here](https://cs.nyu.edu/~silberman/datasets/nyu_depth_v2.html).
 
 Place the downloaded file in the folder data/
 
-For the lazy: run download_nyu_dataset.sh to automatically download the dataset. Run  `save_all_images.py` to store the images in seperate folders.
+**For the lazy**: run download_nyu_dataset.sh to automatically download the dataset. Run  `save_all_images.py` to store the images in seperate folders.
 
 ## Required Packages
 * Keras
@@ -97,7 +108,7 @@ This demo requires Bootstrap (version 3). Bootstrap can be served to Flask from 
 
 `python app.py`
 
-This will start the python server.
+This will start the python application.
 
 
 ### Examples
