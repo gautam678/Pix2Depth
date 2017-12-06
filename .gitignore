@@ -7,3 +7,5 @@ static/uploads/*
 static/results/*
 *.h5
 config.py
+static/vendor/bootstrap
+static/vendor/jquery
