@@ -1,0 +1,5 @@
+weights/p2d_pix2pix.h5
+weights/p2d_cycle.h5
+weights/p2d_cnn.h5
+weights/d2p_pix2pix.h5
+weights/d2p_cycle.h5
