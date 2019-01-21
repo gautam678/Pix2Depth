@@ -9,8 +9,10 @@
 
 
 I was not able to add the weights to the repository. I've created a drive and I'm adding the weights along with some images. 
-model - Weights from the experiment 
-src/model - Result of running the model on a sample image. 
+
+
+* model - Weights from the experiment 
+* src/model - Result of running the model on a sample image. 
 
 
 
