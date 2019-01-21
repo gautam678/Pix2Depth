@@ -17,6 +17,7 @@ src/model - Result of running the model on a sample image.
 [Weights and Results](https://drive.google.com/drive/folders/1DzFIh9MkS-CjZYn1Mqcw1qt_0Jk9tSNe?usp=sharing)
 
 
+## Description
 Estimating depth information from stereo images is easy, but does the same work for monocular images?
 We did all the heavylifting so you don't have to do it. We have explored several methods to extract depth from monocular images. Pix2Depth is a culmination of things we've learnt thus far.
 
